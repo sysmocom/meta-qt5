@@ -19,6 +19,7 @@ SRC_URI += "\
 SRC_URI += "\
     file://0007-qmake-don-t-build-it-in-configure-but-allow-to-build.patch \
     file://0008-eglfs-fix-egl-error-for-platforms-only-supporting-on.patch \
+    file://0001-qeglplatformintegration-Undefine-CursorShape-from-X..patch \
 "
 
 SRCREV = "c6b555dac389f9a599a9ad342de56dea329fff60"
