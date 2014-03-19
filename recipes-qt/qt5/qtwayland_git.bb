@@ -7,6 +7,5 @@ require ${PN}.inc
 SRCREV = "96275509fcec8abc8e580aa6c3c53d893885b7a7"
 
 SRC_URI += " \
-    file://0001-xcomposite-glx-Fix-build-on-Qt-5.2.1.patch \
     file://0001-examples.pro-include-server-buffer-only-when-buildin.patch \
 "
