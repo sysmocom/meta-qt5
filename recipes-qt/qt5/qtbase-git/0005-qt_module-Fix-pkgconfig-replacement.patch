@@ -1,7 +1,7 @@
-From 424c78cec252d7f451eea11780ea38d6254cf5c1 Mon Sep 17 00:00:00 2001
+From d0db82678428dba02074d9f46f492cf885279089 Mon Sep 17 00:00:00 2001
 From: Martin Jansa <Martin.Jansa@gmail.com>
 Date: Sat, 27 Apr 2013 23:15:37 +0200
-Subject: [PATCH 5/8] qt_module: Fix pkgconfig replacement
+Subject: [PATCH 5/9] qt_module: Fix pkgconfig replacement
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

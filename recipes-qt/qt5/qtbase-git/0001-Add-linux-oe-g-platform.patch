@@ -1,7 +1,7 @@
-From 1813930717ea60a433f71efd2f2c29f7a5a4402a Mon Sep 17 00:00:00 2001
+From 676cc25bb4efee6be87e2f0976f6022c25aa0a98 Mon Sep 17 00:00:00 2001
 From: Martin Jansa <Martin.Jansa@gmail.com>
 Date: Mon, 15 Apr 2013 04:29:32 +0200
-Subject: [PATCH 1/8] Add linux-oe-g++ platform
+Subject: [PATCH 1/9] Add linux-oe-g++ platform
 
 * This qmake.conf unlike other platforms reads most variables from
   shell environment, because it's easier for qt recipes to export
@@ -51,7 +51,7 @@ Signed-off-by: Martin Jansa <Martin.Jansa@gmail.com>
  create mode 100644 mkspecs/linux-oe-g++/qplatformdefs.h
 
 diff --git a/configure b/configure
-index 5e3b71b..a3db224 100755
+index 80958ea..0bd0abe 100755
 --- a/configure
 +++ b/configure
 @@ -324,6 +324,16 @@ getQMakeConf()
@@ -118,7 +118,7 @@ index 5e3b71b..a3db224 100755
  # Use CC/CXX to run config.tests
  mkdir -p "$outpath/config.tests"
  rm -f "$outpath/config.tests/.qmake.cache"
-@@ -3381,7 +3399,7 @@ if [ "$XPLATFORM_MAC" = "yes" ] && [ "$CFG_QGTKSTYLE" = "auto" ]; then
+@@ -3377,7 +3395,7 @@ if [ "$XPLATFORM_MAC" = "yes" ] && [ "$CFG_QGTKSTYLE" = "auto" ]; then
      CFG_QGTKSTYLE=no
  fi
  
@@ -127,7 +127,7 @@ index 5e3b71b..a3db224 100755
  
  TEST_COMPILER=$QMAKE_CONF_COMPILER
  
-@@ -3416,7 +3434,7 @@ if [ "$XPLATFORM_SYMBIAN_SBSV2" = "no" ]; then
+@@ -3412,7 +3430,7 @@ if [ "$XPLATFORM_SYMBIAN_SBSV2" = "no" ]; then
          exit 1
      fi
  fi
@@ -136,7 +136,7 @@ index 5e3b71b..a3db224 100755
  
  GCC_MACHINE_DUMP=
  case "$TEST_COMPILER" in *g++) GCC_MACHINE_DUMP=$($TEST_COMPILER -dumpmachine);; esac
-@@ -3897,6 +3915,14 @@ setBootstrapVariable()
+@@ -3893,6 +3911,14 @@ setBootstrapVariable()
      getQMakeConf "$1" | echo ${2-$1} = `if [ -n "$3" ]; then sed "$3"; else cat; fi` >> "$mkfile"
  }
  
@@ -151,7 +151,7 @@ index 5e3b71b..a3db224 100755
  # build qmake
  if true; then ###[ '!' -f "$outpath/bin/qmake" ];
      echo "Creating qmake..."
-@@ -3935,11 +3961,11 @@ if true; then ###[ '!' -f "$outpath/bin/qmake" ];
+@@ -3931,11 +3957,11 @@ if true; then ###[ '!' -f "$outpath/bin/qmake" ];
          fi
  
          [ "$CFG_SILENT" = "yes" ] && CC_TRANSFORM='s,^,\@,' || CC_TRANSFORM=
