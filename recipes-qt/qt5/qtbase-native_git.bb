@@ -15,6 +15,11 @@ SRC_URI += "\
     file://0006-configure-make-pulseaudio-alsa-freetype-a-configurab.patch \
 "
 
+# specific for native version
+SRC_URI += " \
+    file://0010-Always-build-uic.patch \
+"
+
 do_install_append() {
     # for modules which are still using syncqt and call qtPrepareTool(QMAKE_SYNCQT, syncqt)
     # e.g. qt3d, qtwayland
