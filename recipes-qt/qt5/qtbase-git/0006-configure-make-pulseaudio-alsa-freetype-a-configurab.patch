@@ -1,0 +1,45 @@
+From 4444a5901466a43e69df91f457b6d7a0870a0421 Mon Sep 17 00:00:00 2001
+From: Paul Eggleton <paul.eggleton@linux.intel.com>
+Date: Tue, 28 Feb 2012 15:10:24 +0000
+Subject: [PATCH 6/8] configure: make pulseaudio, alsa, freetype a configurable
+ option
+
+Allows disabling pulseaudio, alsa, freetype support at configure time
+making builds more deterministic.
+
+Upstream-Status: Submitted https://codereview.qt-project.org/80722
+
+Signed-off-by: Paul Eggleton <paul.eggleton@linux.intel.com>
+Signed-off-by: Martin Jansa <Martin.Jansa@gmail.com>
+---
+ configure | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/configure b/configure
+index c5a1b9c..7d0f8b8 100755
+--- a/configure
++++ b/configure
+@@ -1832,6 +1832,20 @@ while [ "$#" -gt 0 ]; do
+             UNKNOWN_OPT=yes
+         fi
+         ;;
++    pulseaudio)
++        if [ "$VAL" = "yes" ] || [ "$VAL" = "no" ]; then
++            CFG_PULSEAUDIO="$VAL"
++        else
++            UNKNOWN_OPT=yes
++        fi
++        ;;
++    alsa)
++        if [ "$VAL" = "yes" ] || [ "$VAL" = "no" ]; then
++            CFG_ALSA="$VAL"
++        else
++            UNKNOWN_OPT=yes
++        fi
++        ;;
+     gtkstyle)
+         if [ "$VAL" = "yes" ] || [ "$VAL" = "no" ]; then
+             CFG_QGTKSTYLE="$VAL"
+-- 
+1.9.1
+

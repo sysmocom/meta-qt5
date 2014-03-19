@@ -1,6 +1,4 @@
 require qt5-git.inc
 require ${PN}.inc
 
-QT_MODULE_BRANCH = "release"
-# v5.2.1 + 1 commits
-SRCREV = "dd7eec92e7a5f4383783cc161f638867572dc208"
+SRCREV = "01754de4776905205d38d7bc66fa7b7caa0fe79b"
