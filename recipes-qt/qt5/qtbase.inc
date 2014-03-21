@@ -44,18 +44,13 @@ PACKAGECONFIG_DISTRO ?= ""
 PACKAGECONFIG_RELEASE ?= "release"
 # This is in qt5.inc, because qtwebkit-examples are using it to enable ca-certificates dependency
 # PACKAGECONFIG_OPENSSL ?= "openssl"
-PACKAGECONFIG_DEFAULT ?= "dbus udev evdev widgets tools libs"
+PACKAGECONFIG_DEFAULT ?= "dbus udev tools libs"
 
 PACKAGECONFIG ?= " \
     ${PACKAGECONFIG_RELEASE} \
     ${PACKAGECONFIG_DEFAULT} \
     ${PACKAGECONFIG_OPENSSL} \
-    ${PACKAGECONFIG_GL} \
-    ${PACKAGECONFIG_FB} \
-    ${PACKAGECONFIG_X11} \
-    ${PACKAGECONFIG_FONTS} \
     ${PACKAGECONFIG_SYSTEM} \
-    ${PACKAGECONFIG_MULTIMEDIA} \
     ${PACKAGECONFIG_DISTRO} \
 "
 
