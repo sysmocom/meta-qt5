@@ -132,6 +132,7 @@ QT_CONFIG_FLAGS += " \
     -no-pch \
     -no-rpath \
     -pkg-config \
+    -no-qpa-platform-guard \
     ${EXTRA_OECONF} \
 "
 
