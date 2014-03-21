@@ -1,0 +1,71 @@
+From 0b30c0e223f35ec7e27b04142135afc3f298a776 Mon Sep 17 00:00:00 2001
+From: Holger Hans Peter Freyther <holger@moiji-mobile.com>
+Date: Fri, 21 Mar 2014 20:25:19 +0100
+Subject: [PATCH] Add wrapper for the resetFailedUnit command
+
+---
+ src/sdmanager.cpp | 14 ++++++++++++++
+ src/sdmanager.h   |  2 ++
+ src/sdmanager_p.h |  1 +
+ 3 files changed, 17 insertions(+)
+
+diff --git a/src/sdmanager.cpp b/src/sdmanager.cpp
+index 6bcd459..b3b41f7 100644
+--- a/src/sdmanager.cpp
++++ b/src/sdmanager.cpp
+@@ -333,6 +333,15 @@ Job::Ptr SystemdPrivate::stopUnit(const QString &name, const Systemd::Mode mode)
+     return job;
+ }
+ 
++void SystemdPrivate::resetFailedUnit(const QString& name)
++{
++    QDBusPendingReply<QDBusObjectPath> reply = isdface.ResetFailedUnit(name);
++    reply.waitForFinished();
++
++    if (reply.isError())
++        qDebug() << reply.error().message();
++}
++
+ QString SystemdPrivate::modeToString(const Systemd::Mode mode)
+ {
+     switch(mode) {
+@@ -447,6 +456,11 @@ Job::Ptr Systemd::stopUnit(const QString &name, const Systemd::Mode mode)
+     return globalSystemd()->stopUnit(name, mode);
+ }
+ 
++void Systemd::resetFailedUnit(const QString &name)
++{
++    return globalSystemd()->resetFailedUnit(name);
++}
++
+ Notifier* Systemd::notifier()
+ {
+     return globalSystemd();
+diff --git a/src/sdmanager.h b/src/sdmanager.h
+index 80fb25a..de09f43 100644
+--- a/src/sdmanager.h
++++ b/src/sdmanager.h
+@@ -185,6 +185,8 @@ namespace Systemd
+      */
+     SDQT_EXPORT Job::Ptr stopUnit(const QString &name, const Mode mode);
+ 
++    SDQT_EXPORT void resetFailedUnit(const QString &name);
++
+     SDQT_EXPORT Notifier* notifier();
+ }
+ 
+diff --git a/src/sdmanager_p.h b/src/sdmanager_p.h
+index defee8f..674ce4f 100644
+--- a/src/sdmanager_p.h
++++ b/src/sdmanager_p.h
+@@ -53,6 +53,7 @@ public:
+     Job::Ptr restartUnit(const QString &name, const Mode mode);
+     Job::Ptr startUnit(const QString &name, const Mode mode);
+     Job::Ptr stopUnit(const QString &name, const Mode mode);
++    void resetFailedUnit(const QString &name);
+ 
+ protected Q_SLOTS:
+     void onJobNew(const uint id, const QDBusObjectPath &job, const QString &unit);
+-- 
+1.9.0
+

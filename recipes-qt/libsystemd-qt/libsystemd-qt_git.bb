@@ -12,7 +12,8 @@ RDEPENDS_${PN} = "dbus"
 PV = "208+git${SRCPV}"
 
 SRC_URI = "git://github.com/ilpianista/libsystemd-qt;branch=master \
-           file://fix-pkgconfig.patch"
+           file://fix-pkgconfig.patch \
+           file://0001-Add-wrapper-for-the-resetFailedUnit-command.patch "
 S= "${WORKDIR}/git"
 SRCREV = "398056b33314fc583dd8d8422e5c2f8b797fdb3b"
 
