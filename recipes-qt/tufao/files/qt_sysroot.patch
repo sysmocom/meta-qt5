@@ -1,0 +1,13 @@
+diff --git a/pkg/tufao.prf.in b/pkg/tufao.prf.in
+index 8fa53d9..2560df3 100644
+--- a/pkg/tufao.prf.in
++++ b/pkg/tufao.prf.in
+@@ -1,5 +1,5 @@
+ QT += network
+ 
+ DEFINES += TUFAO_VERSION_MAJOR=@TUFAO_VERSION_MAJOR@
+-INCLUDEPATH += "@CMAKE_INSTALL_PREFIX@/@includedir@"
+-LIBS += -L"@CMAKE_INSTALL_PREFIX@/@libdir@" -l@TUFAO_LIBRARY@
++INCLUDEPATH += "$$[QT_SYSROOT]@CMAKE_INSTALL_PREFIX@/@includedir@"
++LIBS += -L"$$[QT_SYSROOT]@CMAKE_INSTALL_PREFIX@/@libdir@" -l@TUFAO_LIBRARY@
+

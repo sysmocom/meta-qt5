@@ -1,0 +1,21 @@
+diff --git a/pkg/CMakeLists.txt b/pkg/CMakeLists.txt
+index 25891a5..dffce68 100644
+--- a/pkg/CMakeLists.txt
++++ b/pkg/CMakeLists.txt
+@@ -9,7 +9,7 @@ configure_file(FindTufao.cmake.in FindTufao${TUFAO_VERSION_MAJOR}.cmake @ONLY)
+ 
+ # Install info
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tufao${TUFAO_VERSION_MAJOR}.prf"
+-    DESTINATION "${QT_MKSPECS_DIR}/features"
++    DESTINATION "/usr/lib/qt5/mkspecs/features"
+     COMPONENT development
+ )
+ if(PKG_CONFIG_FOUND)
+@@ -19,6 +19,6 @@ if(PKG_CONFIG_FOUND)
+     )
+ endif(PKG_CONFIG_FOUND)
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/FindTufao${TUFAO_VERSION_MAJOR}.cmake"
+-    DESTINATION "${CMAKE_ROOT}/Modules"
++    DESTINATION "/usr/share/cmake-2.8/Modules"
+     COMPONENT development
+ )
