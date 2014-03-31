@@ -6,6 +6,8 @@ LIC_FILES_CHKSUM = "file://COPYING.LESSER;md5=4fbd65380cdd255951079008b364516c"
 
 inherit cmake_qt5
 
+DEPENDS += "qtbase"
+
 SRC_URI = "git://github.com/vinipsmaker/tufao;branch=master \
            file://hardcode_paths.patch \
            file://qt_sysroot.patch "
