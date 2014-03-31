@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=e6a600fd5e1d9cbde2d983680233ad02"
 
 inherit cmake_qt5
 
-DEPENDS = "systemd"
+DEPENDS += "systemd qtbase"
 RDEPENDS_${PN} = "dbus"
 
 PV = "208+git${SRCPV}"
