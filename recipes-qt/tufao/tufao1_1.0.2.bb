@@ -10,7 +10,8 @@ DEPENDS += "qtbase"
 
 SRC_URI = "git://github.com/vinipsmaker/tufao;branch=master \
            file://hardcode_paths.patch \
-           file://qt_sysroot.patch "
+           file://qt_sysroot.patch \
+           file://fix-204-no-content.patch"
 S= "${WORKDIR}/git"
 SRCREV = "0d37027f8e7a64bc58196b963dffc72e13420c7a"
 

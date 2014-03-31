@@ -1,0 +1,119 @@
+From ea73dadcce8dc958aebde7d4bc0d438d71c46aa2 Mon Sep 17 00:00:00 2001
+From: Holger Hans Peter Freyther <holger@moiji-mobile.com>
+Date: Mon, 31 Mar 2014 21:42:29 +0200
+Subject: [PATCH] response: No message-body should be sent on a 204 No Content
+
+According to the RFC2616 no message-body should be sent when
+the response code 204 is used. When using keep-alive the .NET
+stack will break on response parsing after the next request.
+
+Add some hacks to not generate chunked-encoding in the answer
+and provide a content-length. The code could use some more
+re-use and the question is what should happen when ::write()
+or ::end() with data is used on a 204..
+---
+ src/httpserverresponse.cpp    | 19 ++++++++++++++++---
+ src/priv/httpserverresponse.h |  1 +
+ 2 files changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/src/httpserverresponse.cpp b/src/httpserverresponse.cpp
+index f6e6617..2f87180 100644
+--- a/src/httpserverresponse.cpp
++++ b/src/httpserverresponse.cpp
+@@ -139,6 +139,7 @@ bool HttpServerResponse::writeHead(int statusCode, const QByteArray &reasonPhras
+     priv->device.write(reasonPhrase);
+     priv->device.write(CRLF);
+     priv->formattingState = Priv::HEADERS;
++    priv->responseStatus = statusCode;
+     return true;
+ }
+ 
+@@ -182,6 +183,7 @@ bool HttpServerResponse::writeHead(HttpResponseStatus statusCode,
+         priv->device.write(CRLF);
+     }
+     priv->formattingState = Priv::HEADERS;
++    priv->responseStatus = int(statusCode);
+     return true;
+ }
+ 
+@@ -203,6 +205,7 @@ bool HttpServerResponse::writeHead(HttpResponseStatus statusCode)
+     priv->device.write(reasonPhrase(statusCode));
+     priv->device.write(CRLF);
+     priv->formattingState = Priv::HEADERS;
++    priv->responseStatus = int(statusCode);
+     return true;
+ }
+ 
+@@ -211,6 +214,10 @@ bool HttpServerResponse::write(const QByteArray &chunk)
+     if (!chunk.size())
+         return false;
+ 
++    /* Bad?! At least write the headers? */
++    if (priv->responseStatus == int(HttpResponseStatus::NO_CONTENT) && chunk.size())
++        return false;
++
+     if (priv->options.testFlag(HttpServerResponse::HTTP_1_0)) {
+         switch (priv->formattingState) {
+         case Priv::STATUS_LINE:
+@@ -241,6 +248,7 @@ bool HttpServerResponse::write(const QByteArray &chunk)
+                                   QByteArray::fromRawData(value,
+                                                           sizeof(value) - 1));
+         }
++
+         priv->headers.insert("Transfer-Encoding", "chunked");
+ 
+         for (Headers::iterator i = priv->headers.begin()
+@@ -346,7 +354,9 @@ bool HttpServerResponse::end(const QByteArray &chunk)
+                                                              - 1));
+                 }
+             }
+-            {
++            if (priv->responseStatus == int(HttpResponseStatus::NO_CONTENT))
++                priv->headers.insert("Content-Length", "0");
++            else {
+                 static const char key[] = "Transfer-Encoding",
+                         value[] = "chunked";
+                 priv->headers.insert(QByteArray::fromRawData(key,
+@@ -376,6 +386,7 @@ bool HttpServerResponse::end(const QByteArray &chunk)
+     }
+     case Priv::MESSAGE_BODY:
+     {
++        /* Check that no chunk has been specified for 204... */
+         if (chunk.size()) {
+             if (priv->options.testFlag(HttpServerResponse::HTTP_1_1)) {
+                 priv->device.write(QByteArray::number(chunk.size(), 16));
+@@ -392,7 +403,8 @@ bool HttpServerResponse::end(const QByteArray &chunk)
+             priv->http10Buffer.clear();
+         }
+         if (priv->options.testFlag(HttpServerResponse::HTTP_1_1)) {
+-            priv->device.write(LAST_CHUNK);
++            if (priv->responseStatus != int(HttpResponseStatus::NO_CONTENT))
++                priv->device.write(LAST_CHUNK);
+             priv->formattingState = Priv::TRAILERS;
+         } else {
+             priv->device.close();
+@@ -403,7 +415,8 @@ bool HttpServerResponse::end(const QByteArray &chunk)
+     }
+     case Priv::TRAILERS:
+     {
+-        priv->device.write(CRLF);
++        if (priv->responseStatus != int(HttpResponseStatus::NO_CONTENT))
++            priv->device.write(CRLF);
+         if (!priv->options.testFlag(HttpServerResponse::KEEP_ALIVE))
+             priv->device.close();
+ 
+diff --git a/src/priv/httpserverresponse.h b/src/priv/httpserverresponse.h
+index 2562b34..74598e6 100644
+--- a/src/priv/httpserverresponse.h
++++ b/src/priv/httpserverresponse.h
+@@ -46,6 +46,7 @@ struct HttpServerResponse::Priv
+     QIODevice &device;
+     HttpResponseFormattingState formattingState;
+     Tufao::HttpServerResponse::Options options;
++    int responseStatus;
+     Headers headers;
+ 
+     QByteArray http10Buffer;
+-- 
+1.9.0
+
